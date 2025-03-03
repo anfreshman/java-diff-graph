@@ -3,7 +3,7 @@ package org.dto;
 import lombok.Data;
 
 @Data
-public class project {
+public class Project {
     // 项目id，自动生成的唯一主键
     private String projcetId;
 
