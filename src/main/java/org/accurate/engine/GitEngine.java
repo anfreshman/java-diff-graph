@@ -12,17 +12,15 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GitEngine {
 
     private static final Logger log = LoggerFactory.getLogger(GitEngine.class);
-    /**
-     * 对比同一分支的两个commit
-     * 获取对应的修改文件
-     */
-    public List<String> getDiff(String gitUrl, String branchName, String firstCommit, String secondCommit) throws IOException {
-        List<String> result = new ArrayList<>();
+    public Map<String, DiffEntry.ChangeType> getDiff(String gitUrl, String branchName, String firstCommit, String secondCommit) throws IOException {
+        Map<String, DiffEntry.ChangeType> result = new HashMap<>();
         Git git;
         String[] nameArr = gitUrl.split("/");
         String proName = nameArr[nameArr.length - 2] + "-" + nameArr[nameArr.length - 1].replace(".git", "");
@@ -67,8 +65,8 @@ public class GitEngine {
 
 
             for (DiffEntry diff : diffs) {
-                System.out.println("差异文件: " + diff.getNewPath());
-                result.add(diff.getNewPath());
+                System.out.println("差异文件: " + diff.getNewPath() + diff.getChangeType());
+                result.put(diff.getNewPath(), diff.getChangeType());
             }
 
             revWalk.close();
